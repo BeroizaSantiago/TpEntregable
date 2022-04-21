@@ -1,5 +1,9 @@
 <?php
 include 'Viaje.php';
+include 'Pasajero.php';
+include 'ResponsableV.php';
+
+
 echo "Ingrese el nro del codigo del viaje:";
 $codigo = trim(fgets(STDIN));
 echo "Ingrese el destino del viaje:";
@@ -7,7 +11,19 @@ $destino = trim(fgets(STDIN));
 echo "Ingrese la capacidad maxima de pasajeros del viaje:";
 $capacidadMaxima = trim(fgets(STDIN));
 
-$objViajeNuevo = new Viaje($codigo, $destino,$capacidadMaxima);
+echo "Ingrese los datos del responsable: ";
+echo "\nNombre: ";
+$nombre = trim(fgets(STDIN));
+echo "Apellido: ";
+$apellido = trim(fgets(STDIN));
+echo "Numero de Empleado: ";
+$numEmpleado = trim(fgets(STDIN));
+echo "Numero de Licencia: ";
+$numLicencia = trim(fgets(STDIN));
+
+$objResponsable = new ResponsableV($nombre, $apellido, $numEmpleado, $numLicencia);
+$objViajeNuevo = new Viaje($codigo, $destino,$capacidadMaxima, $objResponsable);
+
 $corte = true;
 do{
 echo menu();
@@ -38,7 +54,7 @@ switch($opcion){
     case '4':
         $pasajero = datosPasajeros();
         if($objViajeNuevo->agregarPasajero($pasajero)){
-            echo "El pasajero: ".$pasajero['nombre']." ".$pasajero['apellido']." fue agregado con exito";
+            echo "El pasajero fue agregado con exito";
             
         }else{
             echo "El pasajero ya se encuentra en el viaje";
@@ -46,13 +62,10 @@ switch($opcion){
         break;
     case '5':
         
-        echo "Ingrese el pasajero que quiere modificar: \n";
-        $pasajero = datosPasajeros();
-        
-        echo "Ingrese los datos del nuevo pasajero:\n ";
-        $nuevoPasajero = datosPasajeros();
-        
-        if($objViajeNuevo->modificarPasajero($pasajero, $nuevoPasajero)){
+        echo "Ingrese el Dni del pasajero a modificar:\n ";
+        $dniPasajero = trim(fgets(STDIN));
+
+        if($objViajeNuevo->modificarPasajero($dniPasajero)){
             echo "Se ha modificado al pasajero";
         }else{
             echo "Pasajero no encontrado ";
@@ -61,6 +74,24 @@ switch($opcion){
     case '6':
         echo $objViajeNuevo;
         break;
+    case '7':
+        $responsable = $objViajeNuevo->getResponsableViaje();
+        echo $responsable;
+        break;
+    case '8':
+        echo "Ingrese los nuevos datos del responsable: \n";
+        echo "Nombre: ";
+        $nombre = trim(fgets(STDIN));
+        echo "Apellido: ";
+        $apellido = trim(fgets(STDIN));
+        echo "Numero de Empleado: ";
+        $numEmpleado = trim(fgets(STDIN));
+        echo "Numero de Licencia: ";
+        $numLicencia = trim(fgets(STDIN));
+        $objResponsable = new ResponsableV($nombre, $apellido, $numEmpleado, $numLicencia);
+        $objViajeNuevo->setResponsableViaje($objResponsable);
+        break;
+
 
     default:
     $corte = false;
@@ -80,7 +111,9 @@ Selecciones una opcion del Menu.
 4.Agregar Pasajero.
 5.Modificar Pasajero.
 6.Mostrar viaje.
-7.Salir.
+7.Ver datos del Responsable del Viaje.
+8.Modificar datos del Responsable.
+9.Salir.
 -------------------------------------------- " ;
 }
 
@@ -92,7 +125,9 @@ function datosPasajeros(){
     $apellidoPasajero = trim(fgets(STDIN));
     echo "Ingrese el DNI del pasajero: ";
     $dniPasajero = trim(fgets(STDIN));
-    $datosPasajero = ['nombre'=>$nombrePasajero, 'apellido'=>$apellidoPasajero,'dni'=>$dniPasajero];
+    echo "Ingrese el telefono del pasajero: ";
+    $telefonoPasajero = trim(fgets(STDIN));
+    $objPasajero = new Pasajero($nombrePasajero,$apellidoPasajero,$dniPasajero,$telefonoPasajero);
         
-    return $datosPasajero;
+    return $objPasajero;
 }
