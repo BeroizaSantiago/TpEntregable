@@ -51,7 +51,10 @@ class Viaje {
         $this->responsableViaje = $responsable;
     }
 
-
+    /**Metodo para agregar pasajeros
+     * @param objeto $objPasajero 
+     * @return string
+     */
     public function agregarPasajero($objPasajero){
         $retorno = false;   
         $colecPasajeros = $this->getPasajeros();
@@ -95,6 +98,10 @@ class Viaje {
         return $retorno; */
     }
 
+    /**Metodo para modificar datos de un pasajero
+     * @param int $dni
+     * @return boolean
+     */
     public function modificarPasajero($dni){
         /*$pasajeroInterno es un array que se guarda con los 
         valores del ultimo array creado*/
@@ -131,6 +138,12 @@ class Viaje {
             $retorno = true;
         }return $retorno; */
     }
+
+     
+    /**Metodo para hacer un string de ls pasajeros
+     * @param void
+     * @return string
+     */
     private function pasajerosString(){
         $datosPasajeros = "";
         foreach ($this->getPasajeros() as $k => $value) {
@@ -141,6 +154,10 @@ class Viaje {
             return $datosPasajeros;
     }
 
+    /**Metodo para preguntar al usuario que dato desea modificar del pasajero
+     * @param objeto $objPasajero
+     * @return objeto
+     */
     private function modificacion($objPasajero){
         $menuModificar = "
         1. Modificar nombre.\n
@@ -191,6 +208,16 @@ class Viaje {
 
     }
 
+    public function hayPasajesDisponible(){
+        $boolean = true;
+        $cantidadMaxPasajeros = $this->getCantMaxPasajeros();
+        $arrayPasajeros = $this->getpasajeros();
+        if($cantidadMaxPasajeros <= (count($arrayPasajeros))){
+            $boolean = false;
+        }
+        return $boolean;
+    }
+
 
     public function __toString()
     {
@@ -205,8 +232,7 @@ class Viaje {
         "Asientos ocupados: ".$cantidad."\n".
         "Pasajeros: ". $pasajeros.
         "Responsable: ". $responsableDatos;
-        return $cadena;
+        return $cadena;        
     }
 
 }
-
